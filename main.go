@@ -72,10 +72,14 @@ func main() {
 
 	if *verbose {
 		var spki PublicKeyInfo
-		asn1.Unmarshal(keybytes, &spki)
+		if _, err := asn1.Unmarshal(keybytes, &spki); err != nil {
+			log.Fatal(err)
+		}
 		fmt.Printf("AlgID: %v\n", spki.Algorithm.Algorithm)
 		var pubkey RSAPublicKey
-		asn1.Unmarshal(spki.PublicKey.Bytes, &pubkey)
+		if _, err := asn1.Unmarshal(spki.PublicKey.Bytes, &pubkey); err != nil {
+			log.Fatal(err)
+		}
 		fmt.Printf("N: %v\n", pubkey.N)
 		fmt.Printf("E: %v\n", pubkey.E)
 	}
